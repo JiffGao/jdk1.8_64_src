@@ -691,7 +691,7 @@ public interface List<E> extends Collection<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index > size()})
      */
-    ListIterator<E> listIterator(int index);
+    ListIterator<E> listIterator(int index);// 从指定索引开始获取一个ListIterator
 
     // View
 
@@ -703,12 +703,19 @@ public interface List<E> extends Collection<E> {
      * changes in the returned list are reflected in this list, and vice-versa.
      * The returned list supports all of the optional list operations supported
      * by this list.<p>
+     * 返回此列表在指定的<tt> fromIndex </ tt>（包括）和<tt> toIndex </ tt>（不包括）
+     * 之间的视图。 （如果<tt> fromIndex </ tt>和<tt> toIndex </ tt>相等，则返回列
+     * 表为空。）返回列表由该列表支持，因此返回列表中的非结构性更改将反映在 此列表，反
+     * 之亦然。 返回的列表支持此列表支持的所有可选列表操作。<p>
      *
      * This method eliminates the need for explicit range operations (of
      * the sort that commonly exist for arrays).  Any operation that expects
      * a list can be used as a range operation by passing a subList view
      * instead of a whole list.  For example, the following idiom
      * removes a range of elements from a list:
+     * 此方法消除了对精确范围操作（数组通常存在的那种范围）的需要。
+     * 通过传递subList视图而不是整个列表，可以将期望列表的任何操作用作范围操作。
+     * 例如，以下成语从列表中删除了一系列元素：
      * <pre>{@code
      *      list.subList(from, to).clear();
      * }</pre>
@@ -721,6 +728,9 @@ public interface List<E> extends Collection<E> {
      * any way other than via the returned list.  (Structural modifications are
      * those that change the size of this list, or otherwise perturb it in such
      * a fashion that iterations in progress may yield incorrect results.)
+     * 如果后备列表（即此列表）以除通过返回列表以外的任何其他方式进行<i>结构修改</ i>，
+     * 则此方法返回的列表的语义将变得不确定。 （结构修改是指更改此列表的大小的结构修改，
+     * 或者以其他方式干扰此列表的方式，即正在进行的迭代可能会产生错误的结果。）
      *
      * @param fromIndex low endpoint (inclusive) of the subList
      * @param toIndex high endpoint (exclusive) of the subList
@@ -729,7 +739,7 @@ public interface List<E> extends Collection<E> {
      *         (<tt>fromIndex &lt; 0 || toIndex &gt; size ||
      *         fromIndex &gt; toIndex</tt>)
      */
-    List<E> subList(int fromIndex, int toIndex);
+    List<E> subList(int fromIndex, int toIndex);// 获取指定索引范围内的一个子集合
 
     /**
      * Creates a {@link Spliterator} over the elements in this list.
@@ -753,6 +763,6 @@ public interface List<E> extends Collection<E> {
      */
     @Override
     default Spliterator<E> spliterator() {
-        return Spliterators.spliterator(this, Spliterator.ORDERED);
+        return Spliterators.spliterator(this, Spliterator.ORDERED);// 父接口中Spliterators.spliterator(this, 0)
     }
 }
