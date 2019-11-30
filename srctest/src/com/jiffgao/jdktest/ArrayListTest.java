@@ -13,9 +13,8 @@ public class ArrayListTest {
         MyArrayList<Integer> arrayList = new MyArrayList<Integer>();
         arrayList.add(12);
         arrayList.add(34);
-        arrayList.add(56);
-        arrayList.add(78);
-        arrayList.add(90);
+        arrayList.add(34);
+        arrayList.add(34);
         // System.out.println(arrayList);
         // Integer[] str = new Integer[9];
         // Integer[] strings = arrayList.toArray(str);

@@ -236,7 +236,7 @@ public class ArrayList<E> extends AbstractList<E>
 
     private static int calculateCapacity(Object[] elementData, int minCapacity) {
         if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
-            return Math.max(DEFAULT_CAPACITY, minCapacity);
+            return Math.max(DEFAULT_CAPACITY, minCapacity);// 返回两则和较大的
         }
         return minCapacity;
     }
@@ -488,8 +488,8 @@ public class ArrayList<E> extends AbstractList<E>
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
     public boolean add(E e) {
-        ensureCapacityInternal(size + 1);  // Increments modCount!!
-        elementData[size++] = e;
+        ensureCapacityInternal(size + 1);  // 添加新元素之前先查看是否有足够的空间，空间不足进行扩容
+        elementData[size++] = e;// 先赋值，size再加1
         return true;
     }
 
@@ -497,15 +497,18 @@ public class ArrayList<E> extends AbstractList<E>
      * Inserts the specified element at the specified position in this
      * list. Shifts the element currently at that position (if any) and
      * any subsequent elements to the right (adds one to their indices).
+     * 将指定的元素插入此列表中的指定位置。
+     * 目前移动的元件在该位置（如果有的话）和任何后续元素向右（添加一个到其索引）。
      *
      * @param index index at which the specified element is to be inserted
      * @param element element to be inserted
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
     public void add(int index, E element) {
-        rangeCheckForAdd(index);
-
+        rangeCheckForAdd(index);// 判断是否越界
+        // 查看是否有充足的空间空间不足进行扩容
         ensureCapacityInternal(size + 1);  // Increments modCount!!
+        // 使用System.arraycopy实现元素右移
         System.arraycopy(elementData, index, elementData, index + 1,
                          size - index);
         elementData[index] = element;
@@ -523,17 +526,15 @@ public class ArrayList<E> extends AbstractList<E>
      */
     public E remove(int index) {
         rangeCheck(index);
-
         modCount++;
-        E oldValue = elementData(index);
-
-        int numMoved = size - index - 1;
+        E oldValue = elementData(index);// 获取当前位置元素
+        int numMoved = size - index - 1;// 要移动的下标
         if (numMoved > 0)
-            System.arraycopy(elementData, index+1, elementData, index,
-                             numMoved);
+            // 右移操作
+            System.arraycopy(elementData, index+1, elementData, index, numMoved);
         elementData[--size] = null; // clear to let GC do its work
 
-        return oldValue;
+        return oldValue;// 返回删除的元素，why？
     }
 
     /**
@@ -631,7 +632,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @throws NullPointerException if the specified collection is null
      */
     public boolean addAll(int index, Collection<? extends E> c) {
-        rangeCheckForAdd(index);
+        rangeCheckForAdd(index);// 判断是否越界
 
         Object[] a = c.toArray();
         int numNew = a.length;

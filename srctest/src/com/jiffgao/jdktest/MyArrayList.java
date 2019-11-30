@@ -350,7 +350,8 @@ public class MyArrayList<E> extends AbstractList<E>
      */
     public boolean add(E e) {
         ensureCapacityInternal(size + 1);  // Increments modCount!!
-        elementData[size++] = e;
+        elementData[size] = e;
+        size++;
         return true;
     }
 
