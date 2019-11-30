@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2003, 2018, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  *
@@ -915,6 +915,7 @@ public class BMPImageReader extends ImageReader implements BMPConstants {
                 throw new
                     IIOException(I18N.getString("BMPImageReader1"));
             }
+            break;
 
         case VERSION_4_8_BIT:
             switch((int)compression) {
