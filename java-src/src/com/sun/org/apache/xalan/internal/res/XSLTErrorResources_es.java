@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2019, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 /*
@@ -1363,7 +1363,7 @@ public class XSLTErrorResources_es extends ListResourceBundle
   {  "optionLF", "   [-LF (Utilizar saltos de l\u00EDnea s\u00F3lo en la salida {el valor por defecto es CR/LF})]"},
   {  "optionCR", "   [-CR (Utilizar retornos de carro s\u00F3lo en la salida {el valor por defecto es CR/LF})]"},
   { "optionESCAPE", "   [-ESCAPE (Caracteres para introducir escape {el valor por defecto es <>&\"'\\r\\n}]"},
-  { "optionINDENT", "   [-INDENT (Control del n\u00FAmero de espacios para el sangrado {el valor por defecto es 0})]"},
+  { "optionINDENT", "   [-INDENT (Control del n\u00FAmero de espacios para el sangr\u00EDa {el valor por defecto es 0})]"},
   { "optionTT", "   [-TT (Rastrear las plantillas como si se estuviesen llamando.)]"},
   { "optionTG", "   [-TG (Rastrear cada evento de generaci\u00F3n.)]"},
   { "optionTS", "   [-TS (Rastrear cada evento de selecci\u00F3n.)]"},

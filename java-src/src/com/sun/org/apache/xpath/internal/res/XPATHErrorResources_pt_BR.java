@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2007, 2018, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
  */
 /*
  * Copyright 1999-2005 The Apache Software Foundation.
@@ -30,6 +29,7 @@ import java.util.ListResourceBundle;
   * Also you need to  update the count of messages(MAX_CODE)or
  * the count of warnings(MAX_WARNING) [ Information purpose only]
  * @xsl.usage advanced
+ * @LastModified: May 2019
  */
 public class XPATHErrorResources_pt_BR extends ListResourceBundle
 {
@@ -147,6 +147,10 @@ public class XPATHErrorResources_pt_BR extends ListResourceBundle
          "ER_FOUND_COMMA_BUT_NO_FOLLOWING_ARG";
   public static final String ER_PREDICATE_ILLEGAL_SYNTAX =
          "ER_PREDICATE_ILLEGAL_SYNTAX";
+  public static final String ER_PREDICATE_TOO_MANY_OPEN =
+         "ER_PREDICATE_TOO_MANY_OPEN";
+  public static final String ER_COMPILATION_TOO_MANY_OPERATION =
+         "ER_COMPILATION_TOO_MANY_OPERATION";
   public static final String ER_ILLEGAL_AXIS_NAME = "ER_ILLEGAL_AXIS_NAME";
   public static final String ER_UNKNOWN_NODETYPE = "ER_UNKNOWN_NODETYPE";
   public static final String ER_PATTERN_LITERAL_NEEDS_BE_QUOTED =
@@ -457,6 +461,12 @@ public static final String ER_IGNORABLE_WHITESPACE_NOT_HANDLED =
 
   { ER_PREDICATE_ILLEGAL_SYNTAX,
       "'..[predicate]' ou '.[predicate]' \u00E9 uma sintaxe inv\u00E1lida. Use 'self::node()[predicate]'."},
+
+  { ER_PREDICATE_TOO_MANY_OPEN,
+      "Estouro de pilha ao fazer parsing de {0} em {1}. Muitos predicados abertos ({2})."},
+
+  { ER_COMPILATION_TOO_MANY_OPERATION,
+      "Estouro de pilha ao compilar a express\u00E3o. Muitas opera\u00E7\u00F5es ({0})."},
 
   { ER_ILLEGAL_AXIS_NAME,
      "nome do eixo inv\u00E1lido: {0}"},

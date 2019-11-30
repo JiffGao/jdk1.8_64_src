@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2007, 2018, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
  */
 /*
  * Copyright 1999-2004 The Apache Software Foundation.
@@ -1007,10 +1006,10 @@ public class WalkerFactory
       case OpCodes.OP_EXTFUNCTION :
       case OpCodes.OP_FUNCTION :
       case OpCodes.OP_GROUP :
-        expr = compiler.compile(opPos);
+        expr = compiler.compileExpression(opPos);
         break;
       default :
-        expr = compiler.compile(opPos + 2);
+        expr = compiler.compileExpression(opPos + 2);
       }
 
       axis = Axis.FILTEREDLIST;

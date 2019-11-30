@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1996, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1996, 2019, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  *
@@ -530,6 +530,9 @@ public class SecureRandom extends java.util.Random {
      * @return the seed bytes.
      */
     public byte[] generateSeed(int numBytes) {
+        if (numBytes < 0) {
+            throw new NegativeArraySizeException("numBytes cannot be negative");
+        }
         return secureRandomSpi.engineGenerateSeed(numBytes);
     }
 
