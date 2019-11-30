@@ -1,4 +1,4 @@
-// This file was generated AUTOMATICALLY from a template file Sat Oct 06 09:33:54 PDT 2018
+// This file was generated AUTOMATICALLY from a template file Sat Oct 05 03:17:54 PDT 2019
 /*
  * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -239,7 +239,7 @@ class CharacterData02 extends CharacterData {
     private CharacterData02() {};
 
     // The following tables and code generated using:
-  // java GenerateCharacter -plane 2 -template c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u191/11896/jdk/make/data/characterdata/CharacterData02.java.template -spec c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u191/11896/jdk/make/data/unicodedata/UnicodeData.txt -specialcasing c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u191/11896/jdk/make/data/unicodedata/SpecialCasing.txt -proplist c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u191/11896/jdk/make/data/unicodedata/PropList.txt -o c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u191/11896/build/windows-amd64/jdk/gensrc/java/lang/CharacterData02.java -string -usecharforbyte 11 4 1
+  // java GenerateCharacter -plane 2 -template c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u231/13620/jdk/make/data/characterdata/CharacterData02.java.template -spec c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u231/13620/jdk/make/data/unicodedata/UnicodeData.txt -specialcasing c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u231/13620/jdk/make/data/unicodedata/SpecialCasing.txt -proplist c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u231/13620/jdk/make/data/unicodedata/PropList.txt -o c:/re/workspace/8-2-build-windows-amd64-cygwin/jdk8u231/13620/build/windows-amd64/jdk/gensrc/java/lang/CharacterData02.java -string -usecharforbyte 11 4 1
   // The X table has 2048 entries for a total of 4096 bytes.
 
   static final char X[] = (

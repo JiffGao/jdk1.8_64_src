@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2007, 2018, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
  */
 /*
  * Copyright 1999-2004 The Apache Software Foundation.
@@ -75,7 +74,7 @@ public class FilterExprWalker extends AxesWalker
         m_mustHardReset = true;
     case OpCodes.OP_GROUP :
     case OpCodes.OP_VARIABLE :
-      m_expr = compiler.compile(opPos);
+      m_expr = compiler.compileExpression(opPos);
       m_expr.exprSetParent(this);
       //if((OpCodes.OP_FUNCTION == stepType) && (m_expr instanceof com.sun.org.apache.xalan.internal.templates.FuncKey))
       if(m_expr instanceof com.sun.org.apache.xpath.internal.operations.Variable)
@@ -85,7 +84,7 @@ public class FilterExprWalker extends AxesWalker
       }
       break;
     default :
-      m_expr = compiler.compile(opPos + 2);
+      m_expr = compiler.compileExpression(opPos + 2);
       m_expr.exprSetParent(this);
     }
 //    if(m_expr instanceof WalkingIterator)

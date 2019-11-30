@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  *
@@ -772,11 +772,22 @@ public final class DateTimeFormatterBuilder {
         final LocaleStore store = new LocaleStore(map);
         DateTimeTextProvider provider = new DateTimeTextProvider() {
             @Override
+            public String getText(Chronology chrono, TemporalField field,
+                                  long value, TextStyle style, Locale locale) {
+                return store.getText(value, style);
+            }
+            @Override
             public String getText(TemporalField field, long value, TextStyle style, Locale locale) {
                 return store.getText(value, style);
             }
             @Override
-            public Iterator<Entry<String, Long>> getTextIterator(TemporalField field, TextStyle style, Locale locale) {
+            public Iterator<Entry<String, Long>> getTextIterator(Chronology chrono,
+                    TemporalField field, TextStyle style, Locale locale) {
+                return store.getTextIterator(style);
+            }
+            @Override
+            public Iterator<Entry<String, Long>> getTextIterator(TemporalField field,
+                    TextStyle style, Locale locale) {
                 return store.getTextIterator(style);
             }
         };

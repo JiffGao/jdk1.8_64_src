@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2019, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 /*
@@ -359,7 +359,7 @@ public abstract class DTMDefaultBase implements DTM
 
     while (low <= high)
     {
-      int mid = (low + high) / 2;
+      int mid = (low + high) >>> 1;
       int c = list[mid];
 
       if (c > value)
