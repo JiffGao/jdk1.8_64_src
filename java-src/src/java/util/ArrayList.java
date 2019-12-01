@@ -530,7 +530,7 @@ public class ArrayList<E> extends AbstractList<E>
         E oldValue = elementData(index);// 获取当前位置元素
         int numMoved = size - index - 1;// 要移动的下标
         if (numMoved > 0)
-            // 右移操作
+            // 左移操作
             System.arraycopy(elementData, index+1, elementData, index, numMoved);
         elementData[--size] = null; // clear to let GC do its work
 
@@ -546,6 +546,11 @@ public class ArrayList<E> extends AbstractList<E>
      * (if such an element exists).  Returns <tt>true</tt> if this list
      * contained the specified element (or equivalently, if this list
      * changed as a result of the call).
+     * 如果存在指定元素，则从该列表中删除该元素的第一次出现。 如果列表不包含该元素，
+     * 则它保持不变。 更正式地，删除具有最低索引<tt> i </ tt>的元素，使
+     * <tt>（o == null？get（i）== null：o.equals（get（i）））</ tt >
+     * （如果存在这样的元素）。 如果此列表包含指定的元素，则返回<tt> true </ tt>
+     * （或者等效地，如果此列表由于调用而更改），则返回<tt> true </ tt>
      *
      * @param o element to be removed from this list, if present
      * @return <tt>true</tt> if this list contained the specified element
@@ -577,7 +582,7 @@ public class ArrayList<E> extends AbstractList<E>
         if (numMoved > 0)
             System.arraycopy(elementData, index+1, elementData, index,
                              numMoved);
-        elementData[--size] = null; // clear to let GC do its work
+        elementData[--size] = null; // clear to let GC do its work  size = lastIndex + 1
     }
 
     /**
@@ -613,7 +618,7 @@ public class ArrayList<E> extends AbstractList<E>
         ensureCapacityInternal(size + numNew);  // Increments modCount
         System.arraycopy(a, 0, elementData, size, numNew);
         size += numNew;
-        return numNew != 0;
+        return numNew != 0;// a.length==0添加失败
     }
 
     /**
@@ -665,8 +670,7 @@ public class ArrayList<E> extends AbstractList<E>
     protected void removeRange(int fromIndex, int toIndex) {
         modCount++;
         int numMoved = size - toIndex;
-        System.arraycopy(elementData, toIndex, elementData, fromIndex,
-                         numMoved);
+        System.arraycopy(elementData, toIndex, elementData, fromIndex, numMoved);
 
         // clear to let GC do its work
         int newSize = size - (toIndex-fromIndex);
@@ -750,19 +754,17 @@ public class ArrayList<E> extends AbstractList<E>
         int r = 0, w = 0;
         boolean modified = false;
         try {
-            for (; r < size; r++)
-                if (c.contains(elementData[r]) == complement)
+            for (; r < size; r++)// removeAll(Collection<?> c)方法调用时把不在指定集合c中的元素提取出来
+                if (c.contains(elementData[r]) == complement)// removeAll(Collection<?> c)方法调用时complement==false
                     elementData[w++] = elementData[r];
         } finally {
             // Preserve behavioral compatibility with AbstractCollection,
             // even if c.contains() throws.
-            if (r != size) {
-                System.arraycopy(elementData, r,
-                                 elementData, w,
-                                 size - r);
+            if (r != size) {// 多线程同时执行removeAll(Collection<?> c)和add方法是会导致r！=size，此时会将添加的元素也一并处理
+                System.arraycopy(elementData, r, elementData, w, size - r);
                 w += size - r;
             }
-            if (w != size) {
+            if (w != size) {// w==size时数据删除失败，有可能c中没有元素，也可能多线程导致同时执行了单个元素的remove方法
                 // clear to let GC do its work
                 for (int i = w; i < size; i++)
                     elementData[i] = null;
@@ -777,6 +779,7 @@ public class ArrayList<E> extends AbstractList<E>
     /**
      * Save the state of the <tt>ArrayList</tt> instance to a stream (that
      * is, serialize it).
+     * 将<tt> ArrayList </ tt>实例的状态保存到流中（即，对其进行序列化）。
      *
      * @serialData The length of the array backing the <tt>ArrayList</tt>
      *             instance is emitted (int), followed by all of its elements
@@ -836,6 +839,9 @@ public class ArrayList<E> extends AbstractList<E>
      * returned by an initial call to {@link ListIterator#next next}.
      * An initial call to {@link ListIterator#previous previous} would
      * return the element with the specified index minus one.
+     * 从列表中的指定位置开始，以适当的顺序返回在此列表中的元素上的列表迭代器。
+     * 指定的索引指示初始调用{@link ListIterator＃next next}将返回的第一个元素。
+     * 初次调用{@link ListIterator＃previous previous}将返回具有指定索引减一的元素。
      *
      * <p>The returned list iterator is <a href="#fail-fast"><i>fail-fast</i></a>.
      *
@@ -1008,6 +1014,12 @@ public class ArrayList<E> extends AbstractList<E>
      * empty.)  The returned list is backed by this list, so non-structural
      * changes in the returned list are reflected in this list, and vice-versa.
      * The returned list supports all of the optional list operations.
+     * 返回此列表在指定的{@code fromIndex}（含）和{@code toIndex}（互斥）之间的视图。
+     * （如果{@code fromIndex}和{@code toIndex}相等，则返回列表为空。）
+     * 此列表支持返回的列表，因此返回列表中的
+     * 非结构性(原集合不可以进行增删操作，可以更改元素的值，并且可以在sublist中显示出来)
+     * 更改会反映在该列表中，
+     * 反之亦然。 返回的列表支持集合所有操作。
      *
      * <p>This method eliminates the need for explicit range operations (of
      * the sort that commonly exist for arrays).  Any operation that expects
@@ -1276,6 +1288,7 @@ public class ArrayList<E> extends AbstractList<E>
         }
     }
 
+    // 可是使用lambda表达式遍历元素subList.forEach(x -> System.out.println(x));
     @Override
     public void forEach(Consumer<? super E> action) {
         Objects.requireNonNull(action);
@@ -1300,6 +1313,9 @@ public class ArrayList<E> extends AbstractList<E>
      * {@link Spliterator#SUBSIZED}, and {@link Spliterator#ORDERED}.
      * Overriding implementations should document the reporting of additional
      * characteristic values.
+     * <p> {@ code Spliterator}报告{@link Spliterator＃SIZED}，
+     * {@ link Spliterator＃SUBSIZED}和{@link Spliterator＃ORDERED}。
+     * 重写实现应记录其他特征值的报告。
      *
      * @return a {@code Spliterator} over the elements in this list
      * @since 1.8

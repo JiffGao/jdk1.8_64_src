@@ -46,6 +46,12 @@ package java.util;
  * specifically for use with capacity-restricted {@code Queue}
  * implementations; in most implementations, insert operations cannot
  * fail.
+ * 设计用于在处理之前容纳元素的集合。 除了基本的
+ * {@link java.util.Collection Collection}操作之外，队列还提供其他插入，
+ * 提取和检查操作。 这些方法中的每一种都以两种形式存在：一种在操作失败时引
+ * 发异常，另一种返回一个特殊值（{@code null}或{@code false}，具体取决于
+ * 操作）。 插入操作的后一种形式专门设计用于容量受限的{@code Queue}实现；
+ * 在大多数实现中，插入操作不会失败。
  *
  * <table BORDER CELLPADDING=3 CELLSPACING=1>
  * <caption>Summary of Queue methods</caption>
@@ -82,6 +88,12 @@ package java.util;
  * the <em>tail</em> of the queue. Other kinds of queues may use
  * different placement rules.  Every {@code Queue} implementation
  * must specify its ordering properties.
+ * <p>通常（但不一定）以FIFO（先进先出）的方式对元素进行排序。
+ * 例外情况包括优先级队列（根据提供的比较器对元素进行排序或元素的自然排序）
+ * 和LIFO队列（或堆栈），对LIFO进行排序（后进先出）。 无论使用哪种顺序，
+ * 队列的<em> head </ em>都是通过调用{@link #remove（）}或{@link #poll（）}
+ * 来删除的元素。 在FIFO队列中，所有新元素都插入队列的<em> tail </ em>中。
+ * 其他种类的队列可能使用不同的放置规则。 每个{@code Queue}实现都必须指定其排序属性。
  *
  * <p>The {@link #offer offer} method inserts an element if possible,
  * otherwise returning {@code false}.  This differs from the {@link
@@ -90,6 +102,10 @@ package java.util;
  * {@code offer} method is designed for use when failure is a normal,
  * rather than exceptional occurrence, for example, in fixed-capacity
  * (or &quot;bounded&quot;) queues.
+ * <p> {@ link #offer offer}方法在可能的情况下插入一个元素，否则返回{@code false}。
+ * 这与{@link java.util.Collection＃add Collection.add}方法不同，该方法只能
+ * 通过引发未经检查的异常来添加元素。 {@code offer}方法设计用于在正常情况下
+ * （而不是在异常情况下）发生故障时，例如在固定容量（或有界）队列中。
  *
  * <p>The {@link #remove()} and {@link #poll()} methods remove and
  * return the head of the queue.
@@ -147,6 +163,9 @@ public interface Queue<E> extends Collection<E> {
      * immediately without violating capacity restrictions, returning
      * {@code true} upon success and throwing an {@code IllegalStateException}
      * if no space is currently available.
+     * 如果可以立即将指定的元素插入此队列，而不会违反容量限制，
+     * 则在成功时返回{@code true}，如果当前没有可用空间，
+     * 则抛出{@code IllegalStateException}。
      *
      * @param e the element to add
      * @return {@code true} (as specified by {@link Collection#add})

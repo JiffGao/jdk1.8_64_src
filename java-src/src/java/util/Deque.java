@@ -42,6 +42,9 @@ package java.util;
  * implementations place no fixed limits on the number of elements
  * they may contain, but this interface supports capacity-restricted
  * deques as well as those with no fixed size limit.
+ * 支持在两端插入和删除元素的线性集合。 名称<i> deque </ i>是“双头队列”的缩写，
+ * 通常发音为“ deck”。 大多数{@code Deque}实现对它们可能包含的元素数量没有固
+ * 定的限制，但是此接口支持容量受限的双端队列以及没有固定大小限制的双端队列。
  *
  * <p>This interface defines methods to access the elements at both
  * ends of the deque.  Methods are provided to insert, remove, and
@@ -52,9 +55,15 @@ package java.util;
  * designed specifically for use with capacity-restricted
  * {@code Deque} implementations; in most implementations, insert
  * operations cannot fail.
+ * <p>此接口定义用于访问双端队列两端的元素的方法。 提供了用于插入，
+ * 删除和检查元素的方法。 这些方法中的每一种都以两种形式存在：
+ * 一种在操作失败时引发异常，另一种返回一个特殊值（{@code null}
+ * 或{@code false}，具体取决于操作）。 插入操作的后一种形式专门
+ * 设计用于容量受限的{@code Deque}实现； 在大多数实现中，插入操作不会失败。
  *
  * <p>The twelve methods described above are summarized in the
  * following table:
+ * <p>下表概述了上述十二种方法：
  *
  * <table BORDER CELLPADDING=3 CELLSPACING=1>
  * <caption>Summary of Deque methods</caption>
@@ -98,6 +107,9 @@ package java.util;
  * added at the end of the deque and removed from the beginning.  The methods
  * inherited from the {@code Queue} interface are precisely equivalent to
  * {@code Deque} methods as indicated in the following table:
+ * <p>此接口扩展了{@link Queue}接口。 当双端队列用作队列时，将导致FIFO（先进先出）
+ * 行为。 元素在双端队列的末尾添加，并从开头删除。 如下表所示，从{@code Queue}接
+ * 口继承的方法与{@code Deque}方法完全等效：
  *
  * <table BORDER CELLPADDING=3 CELLSPACING=1>
  * <caption>Comparison of Queue and Deque methods</caption>
@@ -136,6 +148,9 @@ package java.util;
  * When a deque is used as a stack, elements are pushed and popped from the
  * beginning of the deque.  Stack methods are precisely equivalent to
  * {@code Deque} methods as indicated in the table below:
+ * <p>双端队列也可以用作LIFO（后进先出）堆栈。 此接口应优先于旧式{@link Stack}
+ * 类使用。 当双端队列用作堆栈时，元素从双端队列的开头被压入并弹出。 堆栈方法完
+ * 全等同于{@code Deque}方法，如下表所示：
  *
  * <table BORDER CELLPADDING=3 CELLSPACING=1>
  * <caption>Comparison of Stack and Deque methods</caption>
@@ -197,6 +212,9 @@ public interface Deque<E> extends Queue<E> {
      * throwing an {@code IllegalStateException} if no space is currently
      * available.  When using a capacity-restricted deque, it is generally
      * preferable to use method {@link #offerFirst}.
+     * 如果可以在不违反容量限制的情况下立即执行此操作，则将指定的元素插入此双端队列的前面；
+     * 如果当前没有可用空间，则抛出{@code IllegalStateException}。
+     * 使用容量受限的双端队列时，通常最好使用方法{@link #offerFirst}。
      *
      * @param e the element to add
      * @throws IllegalStateException if the element cannot be added at this
@@ -290,6 +308,7 @@ public interface Deque<E> extends Queue<E> {
     /**
      * Retrieves and removes the first element of this deque,
      * or returns {@code null} if this deque is empty.
+     * 检索并删除此双端队列的第一个元素，如果此双端队列为空，则返回{@code null}。
      *
      * @return the head of this deque, or {@code null} if this deque is empty
      */
@@ -308,6 +327,7 @@ public interface Deque<E> extends Queue<E> {
      *
      * This method differs from {@link #peekFirst peekFirst} only in that it
      * throws an exception if this deque is empty.
+     * 此方法与{@link #peekFirst peekFirst}的不同之处仅在于，如果此双端队列为空，则它将引发异常。
      *
      * @return the head of this deque
      * @throws NoSuchElementException if this deque is empty
@@ -344,7 +364,7 @@ public interface Deque<E> extends Queue<E> {
      * Removes the first occurrence of the specified element from this deque.
      * If the deque does not contain the element, it is unchanged.
      * More formally, removes the first element {@code e} such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>
+     * <tt>(o==null ? e==null : o.equals(e))</tt>
      * (if such an element exists).
      * Returns {@code true} if this deque contained the specified element
      * (or equivalently, if this deque changed as a result of the call).
@@ -364,7 +384,7 @@ public interface Deque<E> extends Queue<E> {
      * Removes the last occurrence of the specified element from this deque.
      * If the deque does not contain the element, it is unchanged.
      * More formally, removes the last element {@code e} such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>
+     * <tt>(o==null ? e==null : o.equals(e))</tt>
      * (if such an element exists).
      * Returns {@code true} if this deque contained the specified element
      * (or equivalently, if this deque changed as a result of the call).
@@ -414,6 +434,11 @@ public interface Deque<E> extends Queue<E> {
      * available.  When using a capacity-restricted deque, this method is
      * generally preferable to the {@link #add} method, which can fail to
      * insert an element only by throwing an exception.
+     * 如果可能的话立即将指定的元素插入此双端队列表示的队列中
+     * （换句话说，在此双端队列的末尾），而不会违反容量限制，
+     * 则在成功时返回{@code true}，并返回{@code false} 如果当前没有可用空间。
+     * 使用容量受限的双端队列时，此方法通常比{@link #add}方法更可取，
+     * 后者只能通过引发异常来插入元素。
      *
      * <p>This method is equivalent to {@link #offerLast}.
      *
@@ -446,6 +471,8 @@ public interface Deque<E> extends Queue<E> {
      * Retrieves and removes the head of the queue represented by this deque
      * (in other words, the first element of this deque), or returns
      * {@code null} if this deque is empty.
+     * 检索并删除此双端队列表示的队列的头部（换句话说，此双端队列的第一个元素），
+     * 如果此双端队列为空，则返回{@code null}。
      *
      * <p>This method is equivalent to {@link #pollFirst()}.
      *
@@ -521,7 +548,7 @@ public interface Deque<E> extends Queue<E> {
      * Removes the first occurrence of the specified element from this deque.
      * If the deque does not contain the element, it is unchanged.
      * More formally, removes the first element {@code e} such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>
+     * <tt>(o==null ? e==null : o.equals(e))</tt>
      * (if such an element exists).
      * Returns {@code true} if this deque contained the specified element
      * (or equivalently, if this deque changed as a result of the call).
@@ -543,7 +570,7 @@ public interface Deque<E> extends Queue<E> {
      * Returns {@code true} if this deque contains the specified element.
      * More formally, returns {@code true} if and only if this deque contains
      * at least one element {@code e} such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
+     * <tt>(o==null ? e==null : o.equals(e))</tt>.
      *
      * @param o element whose presence in this deque is to be tested
      * @return {@code true} if this deque contains the specified element

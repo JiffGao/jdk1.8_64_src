@@ -31,10 +31,14 @@ import java.util.function.Consumer;
  * Doubly-linked list implementation of the {@code List} and {@code Deque}
  * interfaces.  Implements all optional list operations, and permits all
  * elements (including {@code null}).
+ * {@code List}和{@code Deque}接口的双链列表实现。
+ * 实现所有可选的列表操作，并允许所有元素（包括{@code null}）。
  *
  * <p>All of the operations perform as could be expected for a doubly-linked
  * list.  Operations that index into the list will traverse the list from
  * the beginning or the end, whichever is closer to the specified index.
+ * <p>所有操作均按双向链接列表的预期执行。 索引到列表中的操作将从开头或结尾遍历列表，
+ * 以更接近指定索引的位置为准。
  *
  * <p><strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access a linked list concurrently, and at least
@@ -394,6 +398,9 @@ public class LinkedList<E>
      * the right (increases their indices).  The new elements will appear
      * in the list in the order that they are returned by the
      * specified collection's iterator.
+     * 从指定位置开始，将指定集合中的所有元素插入此列表。 将当前位于该位置的元素
+     * （如果有）和任何后续元素右移（增加其索引）。 新元素将按照指定集合的迭代器
+     * 返回的顺序显示在列表中。
      *
      * @param index index at which to insert the first element
      *              from the specified collection
@@ -410,7 +417,7 @@ public class LinkedList<E>
         if (numNew == 0)
             return false;
 
-        Node<E> pred, succ;
+        Node<E> pred, succ;// 定义前任和成功元素
         if (index == size) {
             succ = null;
             pred = last;
@@ -431,7 +438,7 @@ public class LinkedList<E>
 
         if (succ == null) {
             last = pred;
-        } else {
+        } else {// 插入集合的最后一个元素和插入位置的原元素互相指一下
             pred.next = succ;
             succ.prev = pred;
         }

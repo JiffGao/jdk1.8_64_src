@@ -622,8 +622,17 @@ public class MyArrayList<E> extends AbstractList<E>
                     elementData, w,
                     size - r);
                 w += size - r;
+                System.out.println("r=="+r);
+                System.out.println("w=="+w);
+                System.out.println("size=="+size);
+                System.out.println(" r != size");
+                System.out.println("r != sizeʱw=="+w);
             }
             if (w != size) {
+                System.out.println("r=="+r);
+                System.out.println("w=="+w);
+                System.out.println("size=="+size);
+                System.out.println(" w != size");
                 // clear to let GC do its work
                 for (int i = w; i < size; i++)
                     elementData[i] = null;
@@ -632,6 +641,7 @@ public class MyArrayList<E> extends AbstractList<E>
                 modified = true;
             }
         }
+        System.out.println("modified=="+modified);
         return modified;
     }
 
