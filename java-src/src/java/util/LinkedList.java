@@ -131,9 +131,9 @@ public class LinkedList<E>
         final Node<E> newNode = new Node<>(null, e, f);
         first = newNode;
         if (f == null)
-            last = newNode;
+            last = newNode;// 该情况是集合链表为空
         else
-            f.prev = newNode;
+            f.prev = newNode;// 将指定元素指定为原first element的前驱
         size++;
         modCount++;
     }
@@ -312,7 +312,7 @@ public class LinkedList<E>
      * Returns {@code true} if this list contains the specified element.
      * More formally, returns {@code true} if and only if this list contains
      * at least one element {@code e} such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
+     * <tt>(o==null ? e==null : o.equals(e))</tt>.
      *
      * @param o element whose presence in this list is to be tested
      * @return {@code true} if this list contains the specified element
@@ -348,7 +348,7 @@ public class LinkedList<E>
      * if it is present.  If this list does not contain the element, it is
      * unchanged.  More formally, removes the element with the lowest index
      * {@code i} such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>
+     * <tt>(o==null ? get(i)==null : o.equals(get(i)))</tt>
      * (if such an element exists).  Returns {@code true} if this list
      * contained the specified element (or equivalently, if this list
      * changed as a result of the call).
@@ -412,7 +412,7 @@ public class LinkedList<E>
     public boolean addAll(int index, Collection<? extends E> c) {
         checkPositionIndex(index);
 
-        Object[] a = c.toArray();
+        Object[] a = c.toArray();// 将原数据结构打散
         int numNew = a.length;
         if (numNew == 0)
             return false;
@@ -426,7 +426,7 @@ public class LinkedList<E>
             pred = succ.prev;
         }
 
-        for (Object o : a) {
+        for (Object o : a) {// 遍历添加各元素
             @SuppressWarnings("unchecked") E e = (E) o;
             Node<E> newNode = new Node<>(pred, e, null);
             if (pred == null)
@@ -454,9 +454,10 @@ public class LinkedList<E>
      */
     public void clear() {
         // Clearing all of the links between nodes is "unnecessary", but:
-        // - helps a generational GC if the discarded nodes inhabit
-        //   more than one generation
+        // - helps a generational GC if the discarded nodes inhabit more than one generation
+        // 如果丢弃的节点居住超过一代，则可以帮助一代GC
         // - is sure to free memory even if there is a reachable Iterator
+        // 即使有可用的迭代器，也一定要释放内存
         for (Node<E> x = first; x != null; ) {
             Node<E> next = x.next;
             x.item = null;
@@ -592,7 +593,7 @@ public class LinkedList<E>
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
      * More formally, returns the lowest index {@code i} such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
+     * <tt>(o==null ? get(i)==null : o.equals(get(i)))</tt>,
      * or -1 if there is no such index.
      *
      * @param o element to search for
@@ -621,7 +622,7 @@ public class LinkedList<E>
      * Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
      * More formally, returns the highest index {@code i} such that
-     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
+     * <tt>(o==null ? get(i)==null : o.equals(get(i)))</tt>,
      * or -1 if there is no such index.
      *
      * @param o element to search for
@@ -650,6 +651,7 @@ public class LinkedList<E>
 
     /**
      * Retrieves, but does not remove, the head (first element) of this list.
+     * 检索但不删除此列表的头（第一个元素）。
      *
      * @return the head of this list, or {@code null} if this list is empty
      * @since 1.5
@@ -672,11 +674,12 @@ public class LinkedList<E>
 
     /**
      * Retrieves and removes the head (first element) of this list.
+     * 检索并删除此列表的头（第一个元素）。
      *
      * @return the head of this list, or {@code null} if this list is empty
      * @since 1.5
      */
-    public E poll() {
+    public E poll() {//轮询
         final Node<E> f = first;
         return (f == null) ? null : unlinkFirst(f);
     }
@@ -979,6 +982,13 @@ public class LinkedList<E>
         Node<E> next;
         Node<E> prev;
 
+        /**
+         * @Description
+         * @Time 10:08 2019/12/2
+         * @Param [prev前驱, element元素, next后继]
+         * @Return
+         * @Author JiffGao
+         */
         Node(Node<E> prev, E element, Node<E> next) {
             this.item = element;
             this.next = next;
@@ -1046,6 +1056,8 @@ public class LinkedList<E>
      * <p>The returned array will be "safe" in that no references to it are
      * maintained by this list.  (In other words, this method must allocate
      * a new array).  The caller is thus free to modify the returned array.
+     * <p>返回的数组将是“安全的”，因为此列表不保留对其的引用。
+     * （换句话说，此方法必须分配一个新数组）。 因此，调用者可以自由修改返回的数组。
      *
      * <p>This method acts as bridge between array-based and collection-based
      * APIs.
