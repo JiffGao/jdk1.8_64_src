@@ -38,6 +38,8 @@ import java.util.function.UnaryOperator;
  * accessed using an integer index. However, the size of a
  * {@code Vector} can grow or shrink as needed to accommodate
  * adding and removing items after the {@code Vector} has been created.
+ * {@code Vector}类实现对象的可扩展数组。 像数组一样，它包含可以使用整数索引访问的组件。
+ * 但是，{@ code Vector}的大小可以根据需要增大或缩小，以适应在创建{@code Vector}之后添加和删除项目。
  *
  * <p>Each vector tries to optimize storage management by maintaining a
  * {@code capacity} and a {@code capacityIncrement}. The
@@ -47,6 +49,10 @@ import java.util.function.UnaryOperator;
  * {@code capacityIncrement}. An application can increase the
  * capacity of a vector before inserting a large number of
  * components; this reduces the amount of incremental reallocation.
+ * <p>每个向量都尝试通过维持{@code Capacity}和{@code CapacityIncrement}来优化
+ * 存储管理。 {@code Capacity}始终至少与向量大小一样大； 它通常更大，因为随着向向
+ * 量中添加成分，向量的存储量将以{@code CapacityIncrement}的大小逐块增加。 应用程
+ * 序可以在插入大量组件之前增加向量的容量； 这减少了增量重新分配的数量。
  *
  * <p><a name="fail-fast">
  * The iterators returned by this class's {@link #iterator() iterator} and
@@ -93,6 +99,7 @@ public class Vector<E>
      * and is at least large enough to contain all the vector's elements.
      *
      * <p>Any array elements following the last element in the Vector are null.
+     * Vector中最后一个元素之后的所有数组元素均为null。
      *
      * @serial
      */
@@ -112,6 +119,8 @@ public class Vector<E>
      * incremented when its size becomes greater than its capacity.  If
      * the capacity increment is less than or equal to zero, the capacity
      * of the vector is doubled each time it needs to grow.
+     * 向量的容量大于其容量时，该容量自动增加的量。 如果容量增量小于或等于零，
+     * 则向量的容量每次需要增长时都会加倍。
      *
      * @serial
      */
@@ -131,7 +140,7 @@ public class Vector<E>
      *         is negative
      */
     public Vector(int initialCapacity, int capacityIncrement) {
-        super();
+        super();// 调用了父类的无参构造
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal Capacity: "+
                                                initialCapacity);
@@ -260,8 +269,7 @@ public class Vector<E>
     private void grow(int minCapacity) {
         // overflow-conscious code
         int oldCapacity = elementData.length;
-        int newCapacity = oldCapacity + ((capacityIncrement > 0) ?
-                                         capacityIncrement : oldCapacity);
+        int newCapacity = oldCapacity + ((capacityIncrement > 0) ? capacityIncrement : oldCapacity);
         if (newCapacity - minCapacity < 0)
             newCapacity = minCapacity;
         if (newCapacity - MAX_ARRAY_SIZE > 0)
@@ -306,7 +314,7 @@ public class Vector<E>
      *          of this vector)
      */
     public synchronized int capacity() {
-        return elementData.length;
+        return elementData.length;// 返回的是底层数组容量，非真实数据个数
     }
 
     /**
@@ -315,7 +323,7 @@ public class Vector<E>
      * @return  the number of components in this vector
      */
     public synchronized int size() {
-        return elementCount;
+        return elementCount;// 返回的是集合长度
     }
 
     /**
@@ -598,8 +606,7 @@ public class Vector<E>
     public synchronized void insertElementAt(E obj, int index) {
         modCount++;
         if (index > elementCount) {
-            throw new ArrayIndexOutOfBoundsException(index
-                                                     + " > " + elementCount);
+            throw new ArrayIndexOutOfBoundsException(index + " > " + elementCount);
         }
         ensureCapacityHelper(elementCount + 1);
         System.arraycopy(elementData, index, elementData, index + 1, elementCount - index);
@@ -615,6 +622,7 @@ public class Vector<E>
      * <p>This method is identical in functionality to the
      * {@link #add(Object) add(E)}
      * method (which is part of the {@link List} interface).
+     * <p>此方法的功能与{@link #add（Object）add（E）}方法（属于{@link List}接口的一部分）相同。
      *
      * @param   obj   the component to be added
      */
@@ -668,6 +676,8 @@ public class Vector<E>
      * Returns a clone of this vector. The copy will contain a
      * reference to a clone of the internal data array, not a reference
      * to the original internal data array of this {@code Vector} object.
+     * 返回此向量的副本。 该副本将包含对内部数据数组的克隆的引用，
+     * 而不是对此{@code Vector}对象的原始内部数据数组的引用。
      *
      * @return  a clone of this vector
      */
@@ -690,6 +700,7 @@ public class Vector<E>
      *
      * @since 1.2
      */
+    // 返回的是一个新的数组
     public synchronized Object[] toArray() {
         return Arrays.copyOf(elementData, elementCount);
     }
@@ -700,6 +711,9 @@ public class Vector<E>
      * specified array.  If the Vector fits in the specified array, it is
      * returned therein.  Otherwise, a new array is allocated with the runtime
      * type of the specified array and the size of this Vector.
+     * 返回以正确顺序包含此Vector中所有元素的数组； 返回数组的运行时类型是指定
+     * 数组的运行时类型。 如果向量适合指定的数组，则将其返回。 否则，将使用指定
+     * 数组的运行时类型和此Vector的大小分配一个新数组。
      *
      * <p>If the Vector fits in the specified array with room to spare
      * (i.e., the array has more elements than the Vector),
@@ -1146,6 +1160,7 @@ public class Vector<E>
 
     /**
      * An optimized version of AbstractList.Itr
+     * 优化版本的AbstractList.Itr
      */
     private class Itr implements Iterator<E> {
         int cursor;       // index of next element to return
@@ -1213,6 +1228,7 @@ public class Vector<E>
 
     /**
      * An optimized version of AbstractList.ListItr
+     * AbstractList.ListItr的优化版本
      */
     final class ListItr extends Itr implements ListIterator<E> {
         ListItr(int index) {

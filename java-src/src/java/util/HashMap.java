@@ -232,6 +232,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * The default initial capacity - MUST be a power of two.
+     * 默认初始容量-必须为2的幂。
      */
     static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 
@@ -240,10 +241,11 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * by either of the constructors with arguments.
      * MUST be a power of two <= 1<<30.
      */
-    static final int MAXIMUM_CAPACITY = 1 << 30;
+    static final int MAXIMUM_CAPACITY = 1 << 30;// 1073741824
 
     /**
      * The load factor used when none specified in constructor.
+     * 在构造函数中未指定时使用的负载系数。
      */
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
@@ -254,6 +256,9 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * than 2 and should be at least 8 to mesh with assumptions in
      * tree removal about conversion back to plain bins upon
      * shrinkage.
+     * 使用树而不是列表列出容器的容器计数阈值。 将元素添加到至少具有这么
+     * 多节点的bin中时，bin会转换为树。 该值必须大于2，并且至少应为8才能
+     * 与树删除中的假设（收缩时转换回普通箱）相啮合。
      */
     static final int TREEIFY_THRESHOLD = 8;
 
@@ -261,6 +266,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * The bin count threshold for untreeifying a (split) bin during a
      * resize operation. Should be less than TREEIFY_THRESHOLD, and at
      * most 6 to mesh with shrinkage detection under removal.
+     * 在调整大小操作期间用于取消树状化（拆分）bin的bin计数阈值。
+     * 应小于TREEIFY_THRESHOLD，并且最大为6以与移除下的收缩检测相啮合。
      */
     static final int UNTREEIFY_THRESHOLD = 6;
 
@@ -269,6 +276,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * (Otherwise the table is resized if too many nodes in a bin.)
      * Should be at least 4 * TREEIFY_THRESHOLD to avoid conflicts
      * between resizing and treeification thresholds.
+     * 可将其分类为树木的最小桌子容量。 （否则，如果bin中的节点过多，
+     * 则将调整表的大小。）应至少为4 * TREEIFY_THRESHOLD，以避免调整大小和树化阈值之间的冲突。
      */
     static final int MIN_TREEIFY_CAPACITY = 64;
 
@@ -374,6 +383,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns a power of two size for the given target capacity.
+     * 对于给定的目标容量，返回两倍大小的幂。
+     * 用于确保容量是2的幂
      */
     static final int tableSizeFor(int cap) {
         int n = cap - 1;
@@ -412,11 +423,16 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * the HashMap or otherwise modify its internal structure (e.g.,
      * rehash).  This field is used to make iterators on Collection-views of
      * the HashMap fail-fast.  (See ConcurrentModificationException).
+     * 对该HashMap进行结构修改的次数结构修改是指更改HashMap中的映射次数或以其他
+     * 方式修改其内部结构（例如，重新哈希）的修改。 此字段用于使HashMap的
+     * Collection-view上的迭代器快速失败。
+     * （请参阅ConcurrentModificationException）。
      */
     transient int modCount;
 
     /**
      * The next size value at which to resize (capacity * load factor).
+     * 下一个要调整大小的大小值（容量*负载系数）。
      *
      * @serial
      */
@@ -424,10 +440,12 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     // Additionally, if the table array has not been allocated, this
     // field holds the initial array capacity, or zero signifying
     // DEFAULT_INITIAL_CAPACITY.)
+    // 序列化后，javadoc描述为true。 此外，如果尚未分配表阵列，则此字段将保留初始阵列容量，或为零，表示DEFAULT_INITIAL_CAPACITY。
     int threshold;
 
     /**
      * The load factor for the hash table.
+     * 哈希表的负载因子。
      *
      * @serial
      */
@@ -446,13 +464,11 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     public HashMap(int initialCapacity, float loadFactor) {
         if (initialCapacity < 0)
-            throw new IllegalArgumentException("Illegal initial capacity: " +
-                                               initialCapacity);
+            throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
         if (initialCapacity > MAXIMUM_CAPACITY)
             initialCapacity = MAXIMUM_CAPACITY;
         if (loadFactor <= 0 || Float.isNaN(loadFactor))
-            throw new IllegalArgumentException("Illegal load factor: " +
-                                               loadFactor);
+            throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
         this.loadFactor = loadFactor;
         this.threshold = tableSizeFor(initialCapacity);
     }
@@ -508,7 +524,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                     threshold = tableSizeFor(t);
             }
             else if (s > threshold)
-                resize();
+                resize();// 构造public HashMap(Map<? extends K, ? extends V> m)不会走这个，用够早创建一个map使(t > threshold)==true，使用tableSizeFor(t);扩容
             for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
                 K key = e.getKey();
                 V value = e.getValue();
@@ -624,7 +640,9 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
                    boolean evict) {
-        Node<K,V>[] tab; Node<K,V> p; int n, i;
+        Node<K,V>[] tab;
+        Node<K,V> p;
+        int n, i;
         if ((tab = table) == null || (n = tab.length) == 0)
             n = (tab = resize()).length;
         if ((p = tab[i = (n - 1) & hash]) == null)
@@ -671,6 +689,9 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * Otherwise, because we are using power-of-two expansion, the
      * elements from each bin must either stay at same index, or move
      * with a power of two offset in the new table.
+     * 初始化或增加表大小。 如果为空，则根据字段阈值中保持的初始容量目标进行分配。
+     * 否则，因为我们使用的是2的幂，所以每个bin中的元素必须保持相同的索引，
+     * 或者在新表中以2的幂偏移。
      *
      * @return the table
      */
@@ -684,8 +705,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
             }
-            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
-                     oldCap >= DEFAULT_INITIAL_CAPACITY)
+            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY)
                 newThr = oldThr << 1; // double threshold
         }
         else if (oldThr > 0) // initial capacity was placed in threshold
@@ -696,8 +716,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         }
         if (newThr == 0) {
             float ft = (float)newCap * loadFactor;
-            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
-                      (int)ft : Integer.MAX_VALUE);
+            newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ? (int)ft : Integer.MAX_VALUE);
         }
         threshold = newThr;
         @SuppressWarnings({"rawtypes","unchecked"})

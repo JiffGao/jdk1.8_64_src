@@ -25,17 +25,19 @@
 
 package java.util;
 
+import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.io.Serializable;
 
 /**
  * An object that maps keys to values.  A map cannot contain duplicate keys;
  * each key can map to at most one value.
+ * 将键映射到值的对象。 映射不能包含重复的键； 每个键最多可以映射到一个值。
  *
  * <p>This interface takes the place of the <tt>Dictionary</tt> class, which
  * was a totally abstract class rather than an interface.
+ * <p>此接口代替了<tt> Dictionary </ tt>类，该类是一个完全抽象的类，而不是一个接口。
  *
  * <p>The <tt>Map</tt> interface provides three <i>collection views</i>, which
  * allow a map's contents to be viewed as a set of keys, collection of values,
@@ -44,6 +46,10 @@ import java.io.Serializable;
  * elements.  Some map implementations, like the <tt>TreeMap</tt> class, make
  * specific guarantees as to their order; others, like the <tt>HashMap</tt>
  * class, do not.
+ * <p> <tt> Map </ tt>界面提供了三个<i> collection views</ i>，它们允许将map的内
+ * 容作为一组键，值的集合或一组键-值映射来查看 。 映射的<i> order </ i>定义为
+ * 映射集合视图上的迭代器返回其元素的顺序。 某些地图实现（例如<tt> TreeMap </ tt>类）
+ * 对它们的顺序做出特定的保证。 其他对象，例如<tt> HashMap </ tt>类，则不会。
  *
  * <p>Note: great care must be exercised if mutable objects are used as map
  * keys.  The behavior of a map is not specified if the value of an object is
@@ -53,6 +59,10 @@ import java.io.Serializable;
  * permissible for a map to contain itself as a value, extreme caution is
  * advised: the <tt>equals</tt> and <tt>hashCode</tt> methods are no longer
  * well defined on such a map.
+ * 注意：如果将可变对象用作地图键，则必须格外小心。 如果在对象是映射中的键的情况下，
+ * 以影响等值比较的方式更改对象的值，则不会指定映射的行为。 此禁止的一种特殊情况是，
+ * 不允许地图包含自身作为键。 虽然允许映射包含自身作为值，但建议格外小心：在此类映
+ * 射上不再很好地定义equals和hashCode方法。
  *
  * <p>All general-purpose map implementation classes should provide two
  * "standard" constructors: a void (no arguments) constructor which creates an
@@ -319,6 +329,11 @@ public interface Map<K,V> {
      * <tt>removeAll</tt>, <tt>retainAll</tt>, and <tt>clear</tt>
      * operations.  It does not support the <tt>add</tt> or <tt>addAll</tt>
      * operations.
+     * 返回此映射中包含的键的Set视图。 该集合由map支持，因此对map的更改会反映
+     * 在集合中，反之亦然。 如果在对集合进行迭代时修改了映射（通过迭代器自己的remove操作除外）
+     * ，则迭代的结果不确定。 该集合支持元素删除，该元素通过
+     * Iterator.remove，Set.remove，removeAll，retainAll和clear操作从映射中删除相应
+     * 的映射。 它不支持add或addAll操作。
      *
      * @return a set view of the keys contained in this map
      */
@@ -570,6 +585,7 @@ public interface Map<K,V> {
      * or atomicity properties of this method. Any implementation providing
      * atomicity guarantees must override this method and document its
      * concurrency properties.
+     * 默认实现不保证此方法的同步性或原子性。 提供原子性保证的任何实现都必须重写此方法并记录其并发属性。
      *
      * @param key the key whose associated value is to be returned
      * @param defaultValue the default mapping of the key
@@ -583,6 +599,7 @@ public interface Map<K,V> {
      * (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
      * @since 1.8
      */
+    // 解决get(Object key)获取不到值的情况
     default V getOrDefault(Object key, V defaultValue) {
         V v;
         return (((v = get(key)) != null) || containsKey(key))
@@ -596,6 +613,9 @@ public interface Map<K,V> {
      * otherwise specified by the implementing class, actions are performed in
      * the order of entry set iteration (if an iteration order is specified.)
      * Exceptions thrown by the action are relayed to the caller.
+     * 在此映射中为每个条目执行给定的操作，直到所有条目都已处理或该操作引发异常。
+     * 除非实现类另行指定，否则操作将按照条目集迭代的顺序执行（如果指定了迭代顺序。）
+     * 操作所引发的异常会中继到调用者。
      *
      * @implSpec
      * The default implementation is equivalent to, for this {@code map}:
@@ -1085,8 +1105,7 @@ public interface Map<K,V> {
      *         (<a href="{@docRoot}/java/util/Collection.html#optional-restrictions">optional</a>)
      * @since 1.8
      */
-    default V compute(K key,
-            BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+    default V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
         V oldValue = get(key);
 
@@ -1149,9 +1168,11 @@ public interface Map<K,V> {
      * present.
      *
      * @param key key with which the resulting value is to be associated
+     *            与结果值关联的键
      * @param value the non-null value to be merged with the existing value
      *        associated with the key or, if no existing value or a null value
      *        is associated with the key, to be associated with the key
+     *              要与该键关联的现有值合并的非null值，或者如果没有与键关联的现有值或null值，则与该键关联
      * @param remappingFunction the function to recompute a value if present
      * @return the new value associated with the specified key, or null if no
      *         value is associated with the key
@@ -1166,13 +1187,11 @@ public interface Map<K,V> {
      *         null
      * @since 1.8
      */
-    default V merge(K key, V value,
-            BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+    default V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
         Objects.requireNonNull(value);
         V oldValue = get(key);
-        V newValue = (oldValue == null) ? value :
-                   remappingFunction.apply(oldValue, value);
+        V newValue = (oldValue == null) ? value : remappingFunction.apply(oldValue, value);
         if(newValue == null) {
             remove(key);
         } else {

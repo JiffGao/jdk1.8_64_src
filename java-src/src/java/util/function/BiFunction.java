@@ -45,6 +45,7 @@ public interface BiFunction<T, U, R> {
 
     /**
      * Applies this function to the given arguments.
+     * 将此函数应用于给定参数。
      *
      * @param t the first function argument
      * @param u the second function argument
