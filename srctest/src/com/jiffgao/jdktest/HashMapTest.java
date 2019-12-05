@@ -1,6 +1,6 @@
 package com.jiffgao.jdktest;
 
-import java.util.HashMap;
+import com.jiffgao.myutil.MyHashMap;
 
 /**
  * @author Administrator

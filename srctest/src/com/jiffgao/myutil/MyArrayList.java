@@ -1,4 +1,4 @@
-package com.jiffgao.jdktest;
+package com.jiffgao.myutil;
 
 import sun.misc.SharedSecrets;
 

@@ -1,4 +1,4 @@
-package com.jiffgao.jdktest;
+package com.jiffgao.myutil;
 
 import java.util.*;
 

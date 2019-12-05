@@ -1,4 +1,4 @@
-package com.jiffgao.jdktest;
+package com.jiffgao.myutil;
 
 import sun.misc.SharedSecrets;
 
@@ -2084,13 +2084,17 @@ public class MyHashMap<K, V> extends MyAbstractMap<K, V>
             x.red = true;
             TreeNode<K, V>  xpp, xppl, xppr;
             for (TreeNode<K, V> xp; ; ) {
-                if ((xp = x.parent) == null) {
+                xp = x.parent;
+                xpp = xp.parent;
+                if (xp == null) {
                     x.red = false;
                     return x;
-                } else if (!xp.red || (xpp = xp.parent) == null)
+                } else if (!xp.red || xpp == null)
                     return root;
-                if (xp == (xppl = xpp.left)) {
-                    if ((xppr = xpp.right) != null && xppr.red) {
+                xppl = xpp.left;
+                if (xp == xppl) {
+                    xppr = xpp.right;
+                    if (xppr != null && xppr.red) {
                         xppr.red = false;
                         xp.red = false;
                         xpp.red = true;

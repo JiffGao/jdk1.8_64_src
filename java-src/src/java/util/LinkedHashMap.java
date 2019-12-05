@@ -41,12 +41,18 @@ import java.io.IOException;
  * reinserted into a map <tt>m</tt> if <tt>m.put(k, v)</tt> is invoked when
  * <tt>m.containsKey(k)</tt> would return <tt>true</tt> immediately prior to
  * the invocation.)
+ * Map接口的哈希表和链表实现，具有可预测的迭代顺序。 此实现与HashMap的不同之处在于，
+ * 它维护贯穿其所有条目的双向链接列表。 此链表定义了迭代顺序，通常是将键插入映射的顺序（插入顺序）。
+ * 请注意，如果将密钥重新插入到映射中，则插入顺序不会受到影响。
+ * （如果在调用之前m.containsKey（k）将立即返回true的情况下调用了m.put（k，v），则将密钥k重新插入到映射m中。）
  *
  * <p>This implementation spares its clients from the unspecified, generally
  * chaotic ordering provided by {@link HashMap} (and {@link Hashtable}),
  * without incurring the increased cost associated with {@link TreeMap}.  It
  * can be used to produce a copy of a map that has the same order as the
  * original, regardless of the original map's implementation:
+ * 此实现使客户免于HashMap（和Hashtable）提供的未指定的，通常混乱的排序，
+ * 而不会增加与TreeMap相关的成本。 无论原始map的实现如何，都可以使用它来生成与原始map具有相同顺序的map副本：
  * <pre>
  *     void foo(Map m) {
  *         Map copy = new LinkedHashMap(m);

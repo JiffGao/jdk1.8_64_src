@@ -1,8 +1,8 @@
 package com.jiffgao.jdktest;
 
-import java.util.ArrayList;
+import com.jiffgao.myutil.MyArrayList;
+
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * @author Administrator
