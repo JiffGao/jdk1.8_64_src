@@ -835,7 +835,7 @@ public class Hashtable<K,V>
      * @see Map#hashCode()
      * @since 1.2
      */
-    public synchronized int hashCode() {
+    public synchronized int hashCode() {// 各元素hashCode的和
         /*
          * This code detects the recursion caused by computing the hash code
          * of a self-referential hash table and prevents the stack overflow
@@ -865,7 +865,7 @@ public class Hashtable<K,V>
     }
 
     @Override
-    public synchronized V getOrDefault(Object key, V defaultValue) {
+    public synchronized V getOrDefault(Object key, V defaultValue) {// key没有对应的value是设置一个默认值
         V result = get(key);
         return (null == result) ? defaultValue : result;
     }
@@ -911,6 +911,7 @@ public class Hashtable<K,V>
         }
     }
 
+    // 如果指定的键尚未与值关联（或映射为null），则将其与给定值关联并返回null，否则返回当前值。
     @Override
     public synchronized V putIfAbsent(K key, V value) {
         Objects.requireNonNull(value);
