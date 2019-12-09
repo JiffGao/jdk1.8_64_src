@@ -34,6 +34,10 @@ package java.util;
  * {@code entrySet}, {@code keySet} and {@code values} methods).
  * Several additional operations are provided to take advantage of the
  * ordering.  (This interface is the map analogue of {@link SortedSet}.)
+ * 进一步提供其键的总体排序的Map。 根据其键的自然顺序或通常在排序的地图创建时提
+ * 供的Comparator来对地图进行排序。 遍历排序后的地图的集合视图（由entrySet，
+ * keySet和values方法返回）时，将反映此顺序。 提供了一些其他操作以利用订购的优势。
+ * （此接口是SortedSet的地图类似物。）
  *
  * <p>All keys inserted into a sorted map must implement the {@code Comparable}
  * interface (or be accepted by the specified comparator).  Furthermore, all

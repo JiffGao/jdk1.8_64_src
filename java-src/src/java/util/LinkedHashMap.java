@@ -217,6 +217,7 @@ public class LinkedHashMap<K,V>
     /**
      * The iteration ordering method for this linked hash map: <tt>true</tt>
      * for access-order, <tt>false</tt> for insertion-order.
+     * 此链接的哈希映射的迭代排序方法：<tt> true </ tt>用于访问顺序，<tt> false </ tt>用于插入顺序。
      *
      * @serial
      */
@@ -261,7 +262,7 @@ public class LinkedHashMap<K,V>
     Node<K,V> newNode(int hash, K key, V value, Node<K,V> e) {
         LinkedHashMap.Entry<K,V> p =
             new LinkedHashMap.Entry<K,V>(hash, key, value, e);
-        linkNodeLast(p);
+        linkNodeLast(p);// 在此保证有序
         return p;
     }
 
@@ -384,7 +385,7 @@ public class LinkedHashMap<K,V>
      * @param  m the map whose mappings are to be placed in this map
      * @throws NullPointerException if the specified map is null
      */
-    public LinkedHashMap(Map<? extends K, ? extends V> m) {
+    public LinkedHashMap(Map<? extends K, ? extends V> m) {// 怎么保证有序?
         super();
         accessOrder = false;
         putMapEntries(m, false);

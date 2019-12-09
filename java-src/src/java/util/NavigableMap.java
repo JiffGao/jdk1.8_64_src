@@ -46,6 +46,11 @@ package java.util;
  * {@code lowerKey}, {@code floorKey}, {@code ceilingKey}, and
  * {@code higherKey} return only the associated keys. All of these
  * methods are designed for locating, not traversing entries.
+ * 使用导航方法扩展的SortedMap返回给定搜索目标的最接近匹配项。
+ * 方法lowerEntry，floorEntry，ceilingEntry和higherEntry返回分别与小于，
+ * 小于或等于，大于或等于和大于给定键的键关联的Map.Entry对象，如果没有这样的键，
+ * 则返回null。 同样，方法lowerKey，floorKey，ceilingKey和higherKey仅
+ * 返回关联的键。 所有这些方法都是为查找而不是遍历条目而设计的。
  *
  * <p>A {@code NavigableMap} may be accessed and traversed in either
  * ascending or descending key order.  The {@code descendingMap}
