@@ -428,7 +428,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * Collection-view上的迭代器快速失败。
      * （请参阅ConcurrentModificationException）。
      */
-    transient int modCount;
+    transient int modCount;// 记录数据结构发生变化的次数
 
     /**
      * The next size value at which to resize (capacity * load factor).
@@ -834,12 +834,15 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     final Node<K,V> removeNode(int hash, Object key, Object value,
                                boolean matchValue, boolean movable) {
-        Node<K,V>[] tab; Node<K,V> p; int n, index;
+        Node<K,V>[] tab;
+        Node<K,V> p;
+        int n, index;
         if ((tab = table) != null && (n = tab.length) > 0 &&
-            (p = tab[index = (n - 1) & hash]) != null) {
-            Node<K,V> node = null, e; K k; V v;
-            if (p.hash == hash &&
-                ((k = p.key) == key || (key != null && key.equals(k))))
+            (p = tab[index = (n - 1) & hash]) != null) {// 判断key是否存在
+            Node<K,V> node = null, e;
+            K k;
+            V v;
+            if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k))))// 查看是否与链表第一个元素相同
                 node = p;
             else if ((e = p.next) != null) {
                 if (p instanceof TreeNode)

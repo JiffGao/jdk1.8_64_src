@@ -19,7 +19,10 @@ public class TreeMapTest {
         myTreeMap.put(3, "baidu");
         myTreeMap.put(21, "idea");
         myTreeMap.put(5, "world");
-        myTreeMap.forEach(h -> System.out.println(h));
+        // myTreeMap.forEach(h -> System.out.println(h));
+        myTreeMap.forEach((key, value) -> {
+            System.out.println(key + "£º" + value);
+        });
         System.out.println(myTreeMap);
     }
 }
