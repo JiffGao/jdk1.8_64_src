@@ -138,7 +138,7 @@ class SocketInputStream extends FileInputStream
      * @exception IOException If an I/O error has occurred.
      */
     public int read(byte b[], int off, int length) throws IOException {
-        return read(b, off, length, impl.getTimeout());
+        return read(b, off, length, impl.getTimeout());// 最后的拷贝工作还是调用的本地方法
     }
 
     int read(byte b[], int off, int length, int timeout) throws IOException {

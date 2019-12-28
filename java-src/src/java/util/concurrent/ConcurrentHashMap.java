@@ -508,7 +508,7 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * because the top two bits of 32bit hash fields are used for
      * control purposes.
      */
-    private static final int MAXIMUM_CAPACITY = 1 << 30;
+    private static final int MAXIMUM_CAPACITY = 1 << 30;// 2^30 = 1073741824
 
     /**
      * The default initial table capacity.  Must be a power of 2
@@ -520,11 +520,12 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * The largest possible (non-power of two) array size.
      * Needed by toArray and related methods.
      */
-    static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+    static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;// Integer.MAX_VALUE = 2^31-1 = 2147483647
 
     /**
      * The default concurrency level for this table. Unused but
      * defined for compatibility with previous versions of this class.
+     * 该表的默认并发级别。 未使用，但已定义为与此类的先前版本兼容。
      */
     private static final int DEFAULT_CONCURRENCY_LEVEL = 16;
 
@@ -568,18 +569,23 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * serves as a lower bound to avoid resizers encountering
      * excessive memory contention.  The value should be at least
      * DEFAULT_CAPACITY.
+     * 每个传输步骤的最小重新绑定数量。 范围被细分为允许多个调整程序线程。
+     * 此值用作下限，以避免调整器遇到过多的内存争用。 该值应至少为DEFAULT_CAPACITY。
      */
     private static final int MIN_TRANSFER_STRIDE = 16;
 
     /**
      * The number of bits used for generation stamp in sizeCtl.
      * Must be at least 6 for 32bit arrays.
+     * sizeCtl中用于生成标记的位数。 对于32位阵列，必须至少为6。
      */
     private static int RESIZE_STAMP_BITS = 16;
 
     /**
      * The maximum number of threads that can help resize.
+     * 可以帮助调整大小的最大线程数。
      * Must fit in 32 - RESIZE_STAMP_BITS bits.
+     * 必须符合 32-RESIZE_STAMP_BITS 位。
      */
     private static final int MAX_RESIZERS = (1 << (32 - RESIZE_STAMP_BITS)) - 1;
 
@@ -755,8 +761,7 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
         return (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
     }
 
-    static final <K,V> boolean casTabAt(Node<K,V>[] tab, int i,
-                                        Node<K,V> c, Node<K,V> v) {
+    static final <K,V> boolean casTabAt(Node<K,V>[] tab, int i, Node<K,V> c, Node<K,V> v) {
         return U.compareAndSwapObject(tab, ((long)i << ASHIFT) + ABASE, c, v);
     }
 
@@ -1012,12 +1017,12 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
         int hash = spread(key.hashCode());
         int binCount = 0;
         for (Node<K,V>[] tab = table;;) {
-            Node<K,V> f; int n, i, fh;
+            Node<K,V> f;
+            int n, i, fh;
             if (tab == null || (n = tab.length) == 0)
                 tab = initTable();
             else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
-                if (casTabAt(tab, i, null,
-                             new Node<K,V>(hash, key, value, null)))
+                if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
                     break;                   // no lock when adding to empty bin
             }
             else if ((fh = f.hash) == MOVED)
@@ -4526,6 +4531,8 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      * A view of a ConcurrentHashMap as a {@link Set} of keys, in
      * which additions may optionally be enabled by mapping to a
      * common value.  This class cannot be directly instantiated.
+     * ConcurrentHashMap作为一组键的视图，其中可以选择通过映射到公
+     * 共值来启用添加。 此类不能直接实例化。 参见keySet（），keySet（V），
      * See {@link #keySet() keySet()},
      * {@link #keySet(Object) keySet(V)},
      * {@link #newKeySet() newKeySet()},
