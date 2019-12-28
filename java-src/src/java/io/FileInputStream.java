@@ -33,10 +33,13 @@ import sun.nio.ch.FileChannelImpl;
  * A <code>FileInputStream</code> obtains input bytes
  * from a file in a file system. What files
  * are  available depends on the host environment.
+ * FileInputStream从文件系统中的文件获取输入字节。 哪些文件可用取决于主机环境
  *
  * <p><code>FileInputStream</code> is meant for reading streams of raw bytes
  * such as image data. For reading streams of characters, consider using
  * <code>FileReader</code>.
+ * FileInputStream用于读取原始字节流，例如图像数据。
+ * 要读取字符流，请考虑使用FileReader。
  *
  * @author  Arthur van Hoff
  * @see     java.io.File
@@ -90,7 +93,7 @@ class FileInputStream extends InputStream
      * @see        java.lang.SecurityManager#checkRead(java.lang.String)
      */
     public FileInputStream(String name) throws FileNotFoundException {
-        this(name != null ? new File(name) : null);
+        this(name != null ? new File(name) : null);// 调用的是public FileInputStream(File file) throws FileNotFoundException 构造
     }
 
     /**
@@ -121,10 +124,10 @@ class FileInputStream extends InputStream
      * @see        java.lang.SecurityManager#checkRead(java.lang.String)
      */
     public FileInputStream(File file) throws FileNotFoundException {
-        String name = (file != null ? file.getPath() : null);
-        SecurityManager security = System.getSecurityManager();
+        String name = (file != null ? file.getPath() : null);// 如果file不为空，获取file的绝对路径
+        SecurityManager security = System.getSecurityManager();// 查看文件是否受保护
         if (security != null) {
-            security.checkRead(name);
+            security.checkRead(name);// 查看文件是否有读保护
         }
         if (name == null) {
             throw new NullPointerException();
@@ -250,9 +253,10 @@ class FileInputStream extends InputStream
      * <code>len</code> is negative, or <code>len</code> is greater than
      * <code>b.length - off</code>
      * @exception  IOException  if an I/O error occurs.
+     * 调用native方法将从原byte数组off开始读取len个数据放到b[]数组中
      */
     public int read(byte b[], int off, int len) throws IOException {
-        return readBytes(b, off, len);
+        return readBytes(b, off, len);// native方法
     }
 
     /**

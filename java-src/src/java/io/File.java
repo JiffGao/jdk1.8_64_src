@@ -179,6 +179,9 @@ public class File
      * a file path is very limited, and it only covers Nul character check.
      * Returning true means the path is definitely invalid/garbage. But
      * returning false does not guarantee that the path is valid.
+     * 检查文件是否具有无效路径。 当前，对文件路径的检查非常有限，
+     * 并且仅涵盖Nul字符检查。 返回true表示该路径绝对是无效/垃圾。
+     * 但是返回false不能保证路径有效。
      *
      * @return true if the file path is invalid.
      */
@@ -187,7 +190,7 @@ public class File
             status = (this.path.indexOf('\u0000') < 0) ? PathStatus.CHECKED
                                                        : PathStatus.INVALID;
         }
-        return status == PathStatus.INVALID;
+        return status == PathStatus.INVALID;// '==' no '='
     }
 
     /**
@@ -228,6 +231,9 @@ public class File
      * separate filenames in a sequence of files given as a <em>path list</em>.
      * On UNIX systems, this character is <code>':'</code>; on Microsoft Windows systems it
      * is <code>';'</code>.
+     * 与系统有关的路径分隔符。 初始化此字段以包含系统属性path.separator的值的第一个字符。
+     * 该字符用于分隔作为路径列表给出的文件序列中的文件名。 在UNIX系统上，此字符为':'；
+     * 在Microsoft Windows系统上，它是';'。
      *
      * @see     java.lang.System#getProperty(java.lang.String)
      */
@@ -521,9 +527,12 @@ public class File
      * absolute if its prefix is <code>"/"</code>.  On Microsoft Windows systems, a
      * pathname is absolute if its prefix is a drive specifier followed by
      * <code>"\\"</code>, or if its prefix is <code>"\\\\"</code>.
-     *
+     * 测试此抽象路径名是否为绝对路径。 绝对路径名的定义取决于系统。 在UNIX系统上，
+     * 如果路径名的前缀为“ /”，则它是绝对的。 在Microsoft Windows系统上，如果路径
+     * 名的前缀是驱动器说明符，后跟“ \\”，或者其前缀是“ \\\\”，则该路径名是绝对的。
      * @return  <code>true</code> if this abstract pathname is absolute,
      *          <code>false</code> otherwise
+     *
      */
     public boolean isAbsolute() {
         return fs.isAbsolute(this);
@@ -543,6 +552,12 @@ public class File
      * by resolving it against the current directory of the drive named by the
      * pathname, if any; if not, it is resolved against the current user
      * directory.
+     * 如果此抽象路径名已经是绝对路径，则仅通过getPath（）方法返回路径名字符串。
+     * 如果此抽象路径名是空的抽象路径名，则返回由系统属性user.dir命名的当前用户目录的
+     * 路径名字符串。 否则，将以与系统有关的方式解析此路径名。 在UNIX系统上，通过根据
+     * 当前用户目录解析相对路径名来使它成为绝对路径。 在Microsoft Windows系统上，通过
+     * 将相对路径名与由该路径名命名的驱动器的当前目录（如果有）进行解析来使它成为绝对
+     * 路径。 如果不是，则针对当前用户目录进行解析。
      *
      * @return  The absolute pathname string denoting the same file or
      *          directory as this abstract pathname
@@ -559,7 +574,7 @@ public class File
     /**
      * Returns the absolute form of this abstract pathname.  Equivalent to
      * <code>new&nbsp;File(this.{@link #getAbsolutePath})</code>.
-     *
+     * 返回此抽象路径名的绝对形式。 等效于新File（this.getAbsolutePath（））。
      * @return  The absolute abstract pathname denoting the same file or
      *          directory as this abstract pathname
      *
@@ -575,6 +590,7 @@ public class File
 
     /**
      * Returns the canonical pathname string of this abstract pathname.
+     * 返回此抽象路径名的绝对路径名字符串。
      *
      * <p> A canonical pathname is both absolute and unique.  The precise
      * definition of canonical form is system-dependent.  This method first
@@ -584,6 +600,11 @@ public class File
      * such as <tt>"."</tt> and <tt>".."</tt> from the pathname, resolving
      * symbolic links (on UNIX platforms), and converting drive letters to a
      * standard case (on Microsoft Windows platforms).
+     * 规范路径名是绝对的，也是唯一的。 规范形式的精确定义取决于系统。 如有必要，此方法
+     * 首先将该路径名转换为绝对形式，就像通过调用getAbsolutePath（）方法一样，然后以与
+     * 系统有关的方式将其映射为其唯一形式。 这通常涉及删除多余的名称，例如“。”。 和（..）
+     * 从路径名，解析符号链接（在UNIX平台上），并将驱动器号转换为标准大小写
+     * （在Microsoft Windows平台上）。
      *
      * <p> Every pathname that denotes an existing file or directory has a
      * unique canonical form.  Every pathname that denotes a nonexistent file
@@ -593,6 +614,10 @@ public class File
      * created.  Similarly, the canonical form of the pathname of an existing
      * file or directory may be different from the canonical form of the same
      * pathname after the file or directory is deleted.
+     * 表示现有文件或目录的每个路径名都具有唯一的规范形式。 表示不存在的文件或目录的每
+     * 个路径名也具有唯一的规范形式。 创建文件或目录后，不存在的文件或目录的路径名的规
+     * 范形式可能与相同路径名的规范形式不同。 同样，在删除文件或目录后，现有文件或目录
+     * 的路径名的规范形式可能与相同路径名的规范形式不同。
      *
      * @return  The canonical pathname string denoting the same file or
      *          directory as this abstract pathname
@@ -610,6 +635,8 @@ public class File
      *
      * @since   JDK1.1
      * @see     Path#toRealPath
+     *
+     * Canonical 典范
      */
     public String getCanonicalPath() throws IOException {
         if (isInvalid()) {

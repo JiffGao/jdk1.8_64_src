@@ -826,7 +826,7 @@ public final class Integer extends Number implements Comparable<Integer> {
      * @return an {@code Integer} instance representing {@code i}.
      * @since  1.5
      */
-    public static Integer valueOf(int i) {
+    public static Integer valueOf(int i) {// 在IntegerCache范围内使用的是享元设计模式，减少内存开销
         if (i >= IntegerCache.low && i <= IntegerCache.high)
             return IntegerCache.cache[i + (-IntegerCache.low)];
         return new Integer(i);
