@@ -364,6 +364,7 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
 
     /**
      * The topmost head index of the skiplist.
+     * 固定一个object头，head.next()指向链表的真正第一个元素
      */
     private transient volatile HeadIndex<K,V> head;
 
@@ -489,6 +490,7 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
          * Helps out a deletion by appending marker or unlinking from
          * predecessor. This is called during traversals when value
          * field seen to be null.
+         * b是当前节点的前驱，f是当前节点的next
          * @param b predecessor
          * @param f successor
          */
@@ -612,8 +614,8 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
          * @param succ the expected current successor
          * @return true if successful
          */
-        final boolean unlink(Index<K,V> succ) {
-            return node.value != null && casRight(succ, succ.right);
+        final boolean unlink(Index<K,V> succ) {// 把succ当前指针指向succ.right
+            return node.value != null && casRight(succ, succ.right);// 采用CAS操作,没有考虑的ABA问题
         }
 
         // Unsafe mechanics
@@ -662,6 +664,11 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
      * or the base-level header if there is no such node.  Also
      * unlinks indexes to deleted nodes found along the way.  Callers
      * rely on this side-effect of clearing indices to deleted nodes.
+     * 返回其键严格小于给定键的基级别节点，如果没有这样的节点，则返回基级别头。
+     * 还将索引取消链接到沿途发现的已删除节点。 调用者依靠清除索引删除节点的这种副作用。
+     *
+     * 从head开始向右查找，当key小于右节点时，再向下查找，向下为null时，返回当前节点node
+     *
      * @param key the key
      * @return a predecessor of key
      */
@@ -674,9 +681,9 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
                     Node<K,V> n = r.node;
                     K k = n.key;
                     if (n.value == null) {
-                        if (!q.unlink(r))
+                        if (!q.unlink(r))    // 如果q的右节点的值没有了,与当前右节点取消关联,并获取新的右节点
                             break;           // restart
-                        r = q.right;         // reread r
+                        r = q.right;         // reread r 获取q新的右节点重新开始比对
                         continue;
                     }
                     if (cpr(cmp, key, k) > 0) {
@@ -778,7 +785,7 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
             throw new NullPointerException();
         Comparator<? super K> cmp = comparator;
         outer: for (;;) {
-            for (Node<K,V> b = findPredecessor(key, cmp), n = b.next;;) {
+            for (Node<K,V> b = findPredecessor(key, cmp), n = b.next;;) {// 找到key的前任,即上一个节点
                 Object v; int c;
                 if (n == null)
                     break outer;
@@ -791,11 +798,11 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
                 }
                 if (b.value == null || v == n)  // b is deleted
                     break;
-                if ((c = cpr(cmp, key, n.key)) == 0) {
-                    @SuppressWarnings("unchecked") V vv = (V)v;
+                if ((c = cpr(cmp, key, n.key)) == 0) {// 比较key和key的前驱的下一个节点的key是否相等
+                    @SuppressWarnings("unchecked") V vv = (V)v;// 相等的话返回key的前驱的下一个节点的value值
                     return vv;
                 }
-                if (c < 0)
+                if (c < 0) // key不在列表中
                     break outer;
                 b = n;
                 n = f;
@@ -822,7 +829,8 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
         outer: for (;;) {
             for (Node<K,V> b = findPredecessor(key, cmp), n = b.next;;) {
                 if (n != null) {
-                    Object v; int c;
+                    Object v;
+                    int c;
                     Node<K,V> f = n.next;
                     if (n != b.next)               // inconsistent read
                         break;
@@ -854,8 +862,8 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
             }
         }
 
-        int rnd = ThreadLocalRandom.nextSecondarySeed();
-        if ((rnd & 0x80000001) == 0) { // test highest and lowest bits
+        int rnd = ThreadLocalRandom.nextSecondarySeed();//返回伪随机初始化或更新的辅助种子。
+        if ((rnd & 0x80000001) == 0) { // test highest and lowest bits测试最高和最低位  -2147483647
             int level = 1, max;
             while (((rnd >>>= 1) & 1) != 0)
                 ++level;
@@ -959,13 +967,13 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
         outer: for (;;) {
             for (Node<K,V> b = findPredecessor(key, cmp), n = b.next;;) {
                 Object v; int c;
-                if (n == null)
+                if (n == null)// 已经被删了，并且是末节点或者该节点不存在
                     break outer;
                 Node<K,V> f = n.next;
-                if (n != b.next)                    // inconsistent read
-                    break;
+                if (n != b.next)                    // inconsistent(不一致的) read，被修改了
+                    break;// 重新开始
                 if ((v = n.value) == null) {        // n is deleted
-                    n.helpDelete(b, f);
+                    n.helpDelete(b, f);// b是所删节点的前驱，f是b.next.next
                     break;
                 }
                 if (b.value == null || v == n)      // b is deleted
@@ -979,7 +987,7 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
                 }
                 if (value != null && !value.equals(v))
                     break outer;
-                if (!n.casValue(v, null))
+                if (!n.casValue(v, null))// 把要删除的节点n置为空
                     break;
                 if (!n.appendMarker(f) || !b.casNext(n, f))
                     findNode(key);                  // retry via findNode
@@ -1038,11 +1046,13 @@ public class ConcurrentSkipListMap<K,V> extends AbstractMap<K,V>
      */
     final Node<K,V> findFirst() {
         for (Node<K,V> b, n;;) {
-            if ((n = (b = head.node).next) == null)
+            b = head.node;
+            n = b.next;
+            if (n == null)
                 return null;
             if (n.value != null)
                 return n;
-            n.helpDelete(b, n.next);
+            n.helpDelete(b, n.next);// n节点还在但是value值没了，让head指向下一个有值的node
         }
     }
 
